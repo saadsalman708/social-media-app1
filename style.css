@@ -1,0 +1,444 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Asimovian&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lobster&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Zalando+Sans+Expanded:ital,wght@0,200..900;1,200..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Arimo", sans-serif;
+    user-select: none;
+    transition: all 2s ease;
+    /* border: 1px solid; */
+}
+
+
+
+:root {
+    --body-color: #000;
+    --body-bgcolor: rgb(222, 242, 205);
+    --cards-bgcolor: #fff;
+
+    --postTime-color: rgba(0, 0, 0, 0.6);
+    --blueBtn-color: rgb(58, 107, 255);
+    --greenBtn-color: rgb(11, 184, 39);
+    --redBtn-color: rgb(250, 0, 0);
+}
+
+body.darkTheme {
+    --body-color: #fff;
+    --body-bgcolor: #3e3f44;
+    --cards-bgcolor: #1F1F1F;
+
+    --postTime-color: rgba(255, 255, 255, 0.6);
+    --blueBtn-color: rgb(164, 175, 209);
+    --greenBtn-color: rgb(123, 148, 128);
+    --redBtn-color: rgb(229, 128, 128);
+}
+
+
+
+
+
+
+
+body {
+    color: var(--body-color);
+    background-color: var(--body-bgcolor);
+}
+
+.hidden {
+    display: none !important;
+}
+
+button {
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    padding: .6rem 1rem;
+    border-radius: 6px;
+    transition: none;
+}
+
+
+
+
+
+
+
+/* Login Sign Up pages */
+
+.container {
+    max-width: 600px;
+    background-color: var(--cards-bgcolor);
+    padding: 2rem 3rem 3rem 3rem;
+    text-align: center;
+    border-radius: 30px;
+    box-shadow: 0 6px 40px 8px rgba(0, 0, 0, 0.2);
+}
+
+#loginContainer {
+    margin: 15dvh auto 0 auto;
+}
+
+#signUpContainer {
+    margin: 5dvh auto 0 auto;
+}
+
+#dashboard {
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+h1 {
+    font-family: "Lobster", sans-serif;
+    font-size: 2.5rem;
+    font-weight: normal;
+    margin: 1rem 0 2rem 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+input {
+    color: var(--body-color);
+    background-color: var(--cards-bgcolor);
+    padding: 1rem;
+    border: 1px solid var(--body-color);
+    border-radius: 10px;
+}
+
+#loginBtn,
+#signupBtn {
+    color: #e9ffdb;
+    background-color: rgb(36, 209, 36);
+    font-size: 1.3rem;
+    font-weight: bolder;
+    padding: 1.5rem 1rem 1.5rem 0;
+    border-radius: 20px;
+    border: none;
+}
+
+#loginBtn:hover,
+#signupBtn:hover {
+    color: #fff;
+    background-color: rgb(14, 148, 14);
+}
+
+#loginLink,
+#signupPageLink {
+    font-weight: 500;
+    color: rgb(14, 148, 14);
+    text-decoration: none;
+}
+
+#loginLink:hover,
+#signupPageLink:hover {
+    color: rgb(36, 209, 36);
+    text-decoration: underline;
+}
+
+
+
+
+
+/* Dashboard */
+
+/* Dashboard's head */
+#dashboardHead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--cards-bgcolor);
+    padding: 0 3rem;
+    border-bottom: 1px solid var(--body-color);
+}
+
+#dashboardHead h1 {
+    margin: .8rem 0;
+}
+
+#dashboardHeadBtn {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+}
+
+/* fix bottom nav only for small screen */
+#dashboardHeadBtnSmall {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    z-index: 2;
+    background-color: var(--cards-bgcolor);
+    width: 100%;
+    border-top: .4px solid var(--body-color);
+}
+
+.smallCreateBtn {
+    position: fixed;
+    bottom: 2.1%;
+    z-index: 5;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1rem;
+}
+
+.smallLogOutBtn {
+    margin: .6rem 1rem .6rem auto;
+}
+
+.icons {
+    font-size: 1.4rem;
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: var(--body-color);
+}
+
+.logOut {
+    color: #fff;
+    /* background: rgb(255, 37, 37); */
+    background: rgb(255, 0, 0);
+}
+
+.logOut:hover {
+    /* background: rgb(255, 84, 42); */
+    background: rgb(185, 38, 2);
+}
+
+/* Dashboard Body */
+#dashboardBody {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center;
+}
+
+/* Welcome Current User */
+#welcomeUser {
+    background-color: var(--cards-bgcolor);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    padding: 2rem 2rem;
+    border-radius: 20px;
+    text-align: start;
+}
+
+#welcomeUser {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Search Container */
+#dashboardSearchContainer {
+    background-color: var(--cards-bgcolor);
+    margin: 1rem 0;
+    padding: 2rem 2rem;
+    border-radius: 20px;
+}
+
+#dashboardSearchContainer div {
+    display: flex;
+    align-items: center;
+    border: 1px solid;
+    padding: 0 1rem 0 0.5rem;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+#dashboardSearchContainer input {
+    width: 100%;
+    border: none;
+}
+
+/* Post Create Container */
+#createPost {
+    background-color: var(--cards-bgcolor);
+    margin: 1rem 0;
+    padding: 2rem 2rem;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#createPost div {
+    display: flex;
+    justify-content: end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+#createPostCancelBtn {
+    color: var(--blueBtn-color);
+    border: 3px solid rgb(58, 107, 255);
+    border-radius: 50px;
+}
+
+#createPostCancelBtn:hover {
+    color: #fff;
+    background-color: rgb(58, 107, 255);
+    border: 3px solid rgb(164, 175, 209);
+}
+
+#createPostPostBtn {
+    color: var(--greenBtn-color);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    border: 3px solid rgb(11, 184, 39);
+    border-radius: 50px;
+    padding: .6rem 1.4rem;
+}
+
+#createPostPostBtn:hover {
+    color: #fff;
+    background-color: rgb(11, 184, 39);
+    border: 3px solid rgb(202, 230, 207);
+}
+
+/* Post's Container */
+#dashboardAllPosts,
+#demoPosts {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Cards */
+.postCard {
+    background-color: var(--cards-bgcolor);
+    text-align: start;
+    border-radius: 20px;
+    padding: 2rem 1rem 1rem 1rem;
+}
+
+.postCardInfo {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.postCardInfo div:first-of-type,
+.postCardNameTime {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: .4rem;
+}
+
+.postUserName {
+    font-size: 1.2rem;
+}
+
+.postTime {
+    font-size: 15px;
+    color: var(--postTime-color);
+}
+
+.postCardInfo div:last-of-type {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.postEditBtn {
+    color: var(--blueBtn-color);
+    border: 3px solid rgb(58, 107, 255);
+    border-radius: 50px;
+}
+
+.postEditBtn:hover {
+    color: #fff;
+    background-color: rgb(58, 107, 255);
+    border: 3px solid rgb(164, 175, 209);
+}
+
+.postDeleteBtn {
+    color: var(--redBtn-color);
+    font-weight: 600;
+    border: 3px solid rgb(250, 0, 0);
+    border-radius: 50px;
+}
+
+.postDeleteBtn:hover {
+    color: #fff;
+    background-color: rgb(250, 0, 0);
+}
+
+.postCardBody {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.postCard img {
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 480px) {
+
+    #loginContainer,
+    #signUpContainer {
+        margin: 50% auto;
+        padding: 2em;
+    }
+
+    #signUpContainer {
+        padding: 1em 2rem;
+    }
+
+    #loginSignUpContainer h1 {
+        font-size: 2rem;
+    }
+
+    #loginBtn {
+        font-size: 1.1rem;
+        padding: 1rem 0 1rem 0;
+    }
+
+    #dashboardHead {
+        padding: 0 2rem;
+    }
+
+    .d-n-small {
+        display: none;
+    }
+
+    #dashboardHeadBtnSmall {
+        display: flex;
+    }
+
+    #dashboardBody {
+        padding: 0 1rem;
+    }
+
+    #dashboardAllPosts,
+    #demoPosts {
+        gap: 1rem;
+    }
+
+    .postCardInfo div:last-of-type {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
