@@ -13,12 +13,14 @@ var signupPageLink = document.querySelector("#signupPageLink");
 
 var dashboardPage = document.querySelector("#dashboard");
 var headCreatePostBtn = document.querySelector(".headCreatePostBtn");
-var dashboardAllPosts = document.querySelector("#dashboardAllPosts");
+var toggleThemeBtn = document.querySelector(".toggleThemeBtn");
+var logOut = document.querySelector(".logOut");
 
 var welcomeUser = document.querySelector("#welcomeUser");
 var welcomeUserSpan = document.querySelector("#welcomeUserSpan");
 
 var dashboardSearchContainer = document.querySelector("#dashboardSearchContainer");
+var searchPostInput = document.querySelector("#searchPostInput");
 
 var createPost = document.querySelector("#createPost");
 var createPostH2 = document.querySelector("#createPostH2");
@@ -29,9 +31,9 @@ var createPostImgUrl = document.querySelector("#createPostImgUrl");
 var createPostCancelBtn = document.querySelector("#createPostCancelBtn");
 var createPostPostBtn = document.querySelector("#createPostPostBtn");
 
-var toggleThemeBtn = document.querySelector(".toggleThemeBtn");
+var dashboardAllPosts = document.querySelector("#dashboardAllPosts");
 
-var logOut = document.querySelector(".logOut");
+var demoPosts = document.querySelector("#demoPosts");
 
 var currentUser = null;
 var editMode = false;
@@ -213,6 +215,9 @@ signupBtn.addEventListener("click", function () {
 
     loginEmail.value = Email;
     loginPassword.value = Password;
+    signupName.value = "";
+    signupEmail.value = "";
+    signupPassword.value = "";
 
     showLoginPage();
 });
@@ -249,7 +254,8 @@ function post() {
         title: title,
         describtion: describtion,
         imageUrl: imageUrl,
-        createdAt: new Date().toLocaleDateString()
+        createdAt: new Date().toLocaleDateString(),
+        likes: []
     };
 
     var allPosts = JSON.parse(localStorage.getItem("allPosts") || "[]");
@@ -259,6 +265,7 @@ function post() {
 
     cleanCreatePostForm();
     showCreatePostContainer();
+    loadAllPosts();
 }
 
 
@@ -353,69 +360,157 @@ function loadAllPosts() {
     var allPosts = JSON.parse(localStorage.getItem("allPosts") || "[]");
 
     dashboardAllPosts.innerHTML = "";
+    demoPosts.classList.remove("hidden");
 
     for (let i = 0; i < allPosts.length; i++) {
+
+        allPosts[i].likes = allPosts[i].likes || [];
+        var likedByCurrent = allPosts[i].likes.includes(currentUser);
 
         var card = document.createElement("div");
         card.classList = "postCard";
 
-        if (allPosts[i].username === currentUser) {
-
-            card.innerHTML =
-                `<!-- Post Info -->
+        card.innerHTML = `
+            <!-- Post Info -->
                 <div class="postCardInfo">
                     <div class="postCardNameTime">
                         <span class="postUserName">${allPosts[i].username}</span>
                         <span class="postTime">Added: ${allPosts[i].createdAt}</span>
                     </div>
                     <div>
-                        <button onclick="editPost(${allPosts[i].id})" class="postEditBtn">Edit</button>
-                        <button onclick="deletePost(${allPosts[i].id})" class="postDeleteBtn">Delete</button>
+                        ${allPosts[i].username === currentUser ?
+                `<button onclick="editPost(${allPosts[i].id})" class="postEditBtn">Edit</button>
+                            <button onclick="deletePost(${allPosts[i].id})" class="postDeleteBtn">Delete</button>  `
+                : ""}
                     </div>
                 </div>
 
                 <hr>
 
                 <!-- Post Body -->
-                    <div class="postCardBody">
-                        <h3>${allPosts[i].title}</h3>
-                        <p>${allPosts[i].describtion}</p>
-                        <img src="${allPosts[i].imageUrl}" alt="">
-                    </div>
-                <button class="icons"><i class="fa-solid fa-heart" style="color: red;"></i></button>
-                <button class="icons"><i class="fa-regular fa-heart"></i></button>
-                `;
+                <div class="postCardBody">
+                    <h3>${allPosts[i].title}</h3>
+                    ${allPosts[i].describtion !== "" ? `<p>${allPosts[i].describtion}</p>` : ""}
+                    ${allPosts[i].imageUrl !== "" ? `<img src="${allPosts[i].imageUrl}" alt="" />` : ""}
+                </div>
+                <div class="likeBtns">
+                    <button class="icons" id="likeBtn${allPosts[i].id}" onclick="toggleLike(${allPosts[i].id})">
+                    <i class="${likedByCurrent ? 'fa-solid' : 'fa-regular'} fa-heart" style="${likedByCurrent ? 'color: red;' : ''}"></i>
+                    </button>
+                    <span class="" id="likeCount${allPosts[i].id}">${allPosts[i].likes.length !== 0 ? allPosts[i].likes.length : ""}</span>
+                </div>
+            `;
 
-            dashboardAllPosts.appendChild(card);
+        dashboardAllPosts.appendChild(card);
+    }
 
-        } else {
+    localStorage.setItem("allPosts", JSON.stringify(allPosts));
+}
 
-            card.innerHTML =
-                `<!-- Post Info -->
+
+
+
+
+function toggleLike(postId) {
+
+    var allPosts = JSON.parse(localStorage.getItem("allPosts"));
+
+    // var idx = allPosts.findIndex(p => p.id === postId);     // Advance one that I does not get for now
+    var index = allPosts.findIndex(function (p) {
+        return p.id === postId;
+    });
+    if (index === -1) return;
+
+    allPosts[index].likes = allPosts[index].likes || [];
+
+    var likeArr = allPosts[index].likes;
+    var userIndex = likeArr.indexOf(currentUser);
+
+    if (userIndex === -1) {
+        likeArr.push(currentUser);
+        // likeArr.unshift(currentUser);
+    } else {
+        likeArr.splice(userIndex, 1);
+        // likeArr.shift(1);
+    }
+
+    localStorage.setItem("allPosts", JSON.stringify(allPosts));
+
+    loadAllPosts();
+}
+
+
+
+
+
+searchPostInput.addEventListener("keyup", function () {
+
+    let allPosts = JSON.parse(localStorage.getItem("allPosts") || "[]");
+
+    let searchText = searchPostInput.value.trim().toLowerCase();
+
+    if (searchText === "") {
+        loadAllPosts();
+        return;
+    }
+
+    // Filter posts
+    var filtered = allPosts.filter(post =>
+        post.title.toLowerCase().includes(searchText) ||
+        post.describtion.toLowerCase().includes(searchText)
+    );
+
+    showFilteredSearchPosts(filtered);
+});
+
+
+
+
+
+function showFilteredSearchPosts(filteredPostsArr) {
+
+    dashboardAllPosts.innerHTML = "";
+    demoPosts.classList.add("hidden");
+
+    for (let i = 0; i < filteredPostsArr.length; i++) {
+        let p = filteredPostsArr[i];
+
+        let likedByCurrent = p.likes?.includes(currentUser);
+
+        let card = document.createElement("div");
+        card.classList = "postCard";
+
+        card.innerHTML = `
             <div class="postCardInfo">
                 <div class="postCardNameTime">
-                    <span class="postUserName">${allPosts[i].username}</span>
-                    <span class="postTime">Added: ${allPosts[i].createdAt}</span>
+                    <span class="postUserName">${p.username}</span>
+                    <span class="postTime">Added: ${p.createdAt}</span>
                 </div>
                 <div>
+                    ${p.username === currentUser ?
+                        `<button onclick="editPost(${p.id})" class="postEditBtn">Edit</button>
+                         <button onclick="deletePost(${p.id})" class="postDeleteBtn">Delete</button>`
+                    : ""}
                 </div>
             </div>
 
             <hr>
 
-            <!-- Post Body -->
-                <div class="postCardBody">
-                    <h3>${allPosts[i].title}</h3>
-                    <p>${allPosts[i].describtion}</p>
-                    <img src="${allPosts[i].imageUrl}" alt="">
-                </div>
-            <button class="icons"><i class="fa-solid fa-heart" style="color: red;"></i></button>
-            <button class="icons"><i class="fa-regular fa-heart"></i></button>
-            `;
+            <div class="postCardBody">
+                <h3>${p.title}</h3>
+                ${p.describtion !== "" ? `<p>${p.describtion}</p>` : ""}
+                ${p.imageUrl !== "" ? `<img src="${p.imageUrl}" alt="">` : ""}
+            </div>
 
-            dashboardAllPosts.appendChild(card);
-        }
-        console.log(allPosts[i].id);          // here                // just checking
+            <div class="likeBtns">
+                <button class="icons" id="likeBtn${p.id}" onclick="toggleLike(${p.id})">
+                    <i class="${likedByCurrent ? 'fa-solid' : 'fa-regular'} fa-heart" style="${likedByCurrent ? 'color: red;' : ''}"></i>
+                </button>
+                <span class="like-count" id="likeCount${p.id}">${p.likes?.length || ""}</span>
+            </div>
+        `;
+
+        dashboardAllPosts.appendChild(card);
     }
 }
 
@@ -425,30 +520,38 @@ function loadAllPosts() {
 
 function smallCreatePostBtn() {
     showCreatePostContainer();
-    dashboardPage.scrollIntoView({behavior: "smooth"});
+    dashboardPage.scrollIntoView({ behavior: "smooth" });
 }
+
+
+
+
 
 loginLink.addEventListener("click", function () {
     showSignupPage();
 });
+
 signupPageLink.addEventListener("click", function () {
     showLoginPage();
 });
+
 headCreatePostBtn.addEventListener("click", function () {
     showCreatePostContainer();
-    dashboardPage.scrollIntoView({behavior: "smooth"});
+    dashboardPage.scrollIntoView({ behavior: "smooth" });
 });
+
 logOut.addEventListener("click", function () {
     logOutFunction();
 });
+
 createPostPostBtn.addEventListener("click", function () {
     if (!editMode) {
         post();
     } else {
         updatePost();
     }
-    loadAllPosts();
 });
+
 createPostCancelBtn.addEventListener("click", function () {
     cleanCreatePostForm();
     showCreatePostContainer();

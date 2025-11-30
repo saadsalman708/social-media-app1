@@ -21,17 +21,29 @@
     --blueBtn-color: rgb(58, 107, 255);
     --greenBtn-color: rgb(11, 184, 39);
     --redBtn-color: rgb(250, 0, 0);
+    
+    --blueBtnHover-color: rgb(58, 107, 255);
+    --greenBtnHover-color: rgb(11, 184, 39);
+    --redBtnHover-color: rgb(255, 0, 0);
+    
+    --likeBtns-color: rgb(232, 119, 119);
 }
 
 body.darkTheme {
     --body-color: #fff;
     --body-bgcolor: #3e3f44;
     --cards-bgcolor: #1F1F1F;
-
+    
     --postTime-color: rgba(255, 255, 255, 0.6);
     --blueBtn-color: rgb(164, 175, 209);
     --greenBtn-color: rgb(123, 148, 128);
     --redBtn-color: rgb(229, 128, 128);
+
+    --blueBtnHover-color: rgb(164, 175, 209);
+    --greenBtnHover-color: rgb(202, 230, 207);
+    --redBtnHover-color: rgb(255, 191, 191);
+
+    --likeBtns-color: rgb(255, 215, 215);
 }
 
 
@@ -287,7 +299,7 @@ input {
 #createPostCancelBtn:hover {
     color: #fff;
     background-color: rgb(58, 107, 255);
-    border: 3px solid rgb(164, 175, 209);
+    border: 3px solid var(--blueBtnHover-color);
 }
 
 #createPostPostBtn {
@@ -302,7 +314,7 @@ input {
 #createPostPostBtn:hover {
     color: #fff;
     background-color: rgb(11, 184, 39);
-    border: 3px solid rgb(202, 230, 207);
+    border: 3px solid var(--greenBtnHover-color);
 }
 
 /* Post's Container */
@@ -360,7 +372,7 @@ input {
 .postEditBtn:hover {
     color: #fff;
     background-color: rgb(58, 107, 255);
-    border: 3px solid rgb(164, 175, 209);
+    border: 3px solid var(--blueBtnHover-color);
 }
 
 .postDeleteBtn {
@@ -373,6 +385,7 @@ input {
 .postDeleteBtn:hover {
     color: #fff;
     background-color: rgb(250, 0, 0);
+    border: 3px solid var(--redBtnHover-color);
 }
 
 .postCardBody {
@@ -382,8 +395,23 @@ input {
     margin: 1rem 0;
 }
 
-.postCard img {
+#dashboardAllPosts img {
     width: 100%;
+    margin-top: 1rem;
+}
+
+#demoPosts p {
+    margin-bottom: 2rem;
+}
+
+#kittyContainer {
+    margin-top: 0;
+}
+
+.likeBtns span {
+    position: absolute;
+    transform: translate(5px , 3px);
+    color: var(--likeBtns-color);
 }
 
 
@@ -399,7 +427,7 @@ input {
 
     #loginContainer,
     #signUpContainer {
-        margin: 50% auto;
+        margin: 40% auto;
         padding: 2em;
     }
 
