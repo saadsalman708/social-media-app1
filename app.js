@@ -1,3 +1,5 @@
+var toggleForLoginSignup = document.querySelector("#toggleForLoginSignup");
+
 var loginPage = document.querySelector("#loginContainer");
 var loginEmail = document.querySelector("#loginEmail");
 var loginPassword = document.querySelector("#loginPassword");
@@ -91,6 +93,7 @@ if (loggedInUser) {
 
 
 function showLoginPage() {
+    toggleForLoginSignup.classList.remove("hidden");
     loginPage.classList.remove("hidden");
     signUpPage.classList.add("hidden");
     dashboardPage.classList.add('hidden');
@@ -110,6 +113,7 @@ function showSignupPage() {
 
 
 function showDashboard() {
+    toggleForLoginSignup.classList.add('hidden');
     loginPage.classList.add('hidden');
     signUpPage.classList.add('hidden');
     dashboardPage.classList.remove('hidden');

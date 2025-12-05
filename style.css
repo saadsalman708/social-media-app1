@@ -7,7 +7,6 @@
     font-family: "Arimo", sans-serif;
     user-select: none;
     transition: all 2s ease;
-    /* border: 1px solid; */
 }
 
 
@@ -215,6 +214,29 @@ input {
     color: var(--body-color);
 }
 
+@keyframes swipeLeft {
+    0% {
+        transform: translateX(100px);
+    }
+    100% {
+        transform: translateX(1px);
+    }
+}
+
+#toggleForLoginSignup {
+    position: fixed;
+    top: 2rem;
+    right: 0;
+    z-index: 3;
+    padding: 1rem 3rem 1rem 1rem;
+    background-color: var(--cards-bgcolor);
+    border-radius: 2rem 0 0 2rem;
+    border: .5px solid var(--body-color);
+    transition: all 2s;
+    transform: translateX(100px);
+    animation: swipeLeft 1s ease 2.5s forwards;
+}
+
 .logOut {
     color: #fff;
     /* background: rgb(255, 37, 37); */
@@ -402,10 +424,6 @@ input {
 
 #demoPosts p {
     margin-bottom: 2rem;
-}
-
-#kittyContainer {
-    margin-top: 0;
 }
 
 .likeBtns span {
