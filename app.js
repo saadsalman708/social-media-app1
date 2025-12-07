@@ -15,7 +15,7 @@ var signupPageLink = document.querySelector("#signupPageLink");
 
 var dashboardPage = document.querySelector("#dashboard");
 var headCreatePostBtn = document.querySelector(".headCreatePostBtn");
-var toggleThemeBtn = document.querySelector(".toggleThemeBtn");
+var toggleThemeBtn = document.querySelectorAll(".toggleThemeBtn");
 var logOut = document.querySelector(".logOut");
 
 var welcomeUser = document.querySelector("#welcomeUser");
@@ -56,21 +56,26 @@ if (storedTheme.theme === "dark") {
     document.body.classList.toggle("darkTheme");
 }
 
-toggleThemeBtn.addEventListener("click", function () {
+toggleThemeBtn.forEach(function (btn) {
 
-    document.body.classList.toggle("darkTheme");
+    btn.addEventListener("click", function () {
 
-    if (storedTheme.txt == "☀️") {
-        storedTheme.txt = "🌙";
-        storedTheme.theme = "dark";
-        toggleThemeBtn.textContent = storedTheme.txt;
-    } else {
-        storedTheme.txt = "☀️";
-        storedTheme.theme = "light";
-        toggleThemeBtn.textContent = storedTheme.txt;
-    }
+        document.body.classList.toggle("darkTheme");
 
-    localStorage.setItem("currentTheme", JSON.stringify(storedTheme));
+        if (storedTheme.txt == "☀️") {
+            storedTheme.txt = "🌙";
+            storedTheme.theme = "dark";
+            toggleThemeBtn.textContent = storedTheme.txt;
+        } else {
+            storedTheme.txt = "☀️";
+            storedTheme.theme = "light";
+            toggleThemeBtn.textContent = storedTheme.txt;
+        }
+
+        toggleThemeBtn.forEach(t => t.textContent = storedTheme.txt);
+
+        localStorage.setItem("currentTheme", JSON.stringify(storedTheme));
+    });
 });
 
 
@@ -492,9 +497,9 @@ function showFilteredSearchPosts(filteredPostsArr) {
                 </div>
                 <div>
                     ${p.username === currentUser ?
-                        `<button onclick="editPost(${p.id})" class="postEditBtn">Edit</button>
+                `<button onclick="editPost(${p.id})" class="postEditBtn">Edit</button>
                          <button onclick="deletePost(${p.id})" class="postDeleteBtn">Delete</button>`
-                    : ""}
+                : ""}
                 </div>
             </div>
 
