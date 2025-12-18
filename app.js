@@ -86,7 +86,15 @@ toggleThemeBtn.forEach(function (btn) {
 var loggedInUser = localStorage.getItem("currentUser");
 
 if (loggedInUser) {
-    currentUser = loggedInUser;
+    let users = JSON.parse(localStorage.getItem('users'));
+
+    for (let i = 0; i < users.length; i++) {
+
+        if (users[i].email === loggedInUser) {
+            currentUser = users[i].name;
+        }
+    }
+    // currentUser = loggedInUser;
     showDashboard();
 } else {
     showLoginPage();
@@ -124,6 +132,15 @@ function showDashboard() {
     dashboardPage.classList.remove('hidden');
 
     if (currentUser) {
+
+        // let users = JSON.parse(localStorage.getItem('users'));
+
+        // for (let i = 0; i < users.length; i++) {
+
+        //     if (users[i].email === currentUser) {                
+        //         welcomeUserSpan.textContent = users[i].name;
+        //     }
+        // }
         welcomeUserSpan.textContent = currentUser;
     }
 
@@ -161,26 +178,44 @@ function cleanCreatePostForm() {
 loginBtn.addEventListener("click", function () {
     event.preventDefault();
 
-    var username = loginEmail.value.trim();
+    var userEmail = loginEmail.value.trim();
     var password = loginPassword.value;
 
-    if (!username || !password) {
-        alert("Fill the information");
+    if (!userEmail || !password) {
+        Swal.fire({
+            title: 'Fill the information',
+            icon: 'warning',
+            showCancelButton: false,
+            customClass: {
+                popup: 'custom-alert',
+                confirmButton: 'custom-alert-confirm-btn'
+            }
+        });
         return false;
     }
 
-    // var users = JSON.parse(localStorage.getItem('users') || '[]');
-    var users = JSON.parse(localStorage.getItem('users') || '{}');
+    var users = JSON.parse(localStorage.getItem('users') || '[]');
+    // var users = JSON.parse(localStorage.getItem('users') || '{}');
 
     for (let i = 0; i < users.length; i++) {
-        if (users[i].email === username && users[i].password === password) {
-            currentUser = username;
-            localStorage.setItem("currentUser", username);
+        if (users[i].email === userEmail && users[i].password === password) {
+            console.log(users[i].name);
+
+            currentUser = users[i].name;
+            localStorage.setItem("currentUser", userEmail);
             showDashboard();
             return;
         }
     }
-    alert("Email or Password invalid");
+    Swal.fire({
+        title: 'Email or Password invalid',
+        icon: 'warning',
+        showCancelButton: false,
+        customClass: {
+            popup: 'custom-alert',
+            confirmButton: 'custom-alert-confirm-btn'
+        }
+    });
 
 });
 
@@ -191,24 +226,83 @@ loginBtn.addEventListener("click", function () {
 signupBtn.addEventListener("click", function () {
     event.preventDefault();
 
-    var Name = signupName.value.trim();
-    var Email = signupEmail.value.trim();
-    var Password = signupPassword.value;
+    var users = JSON.parse(localStorage.getItem('users') || '[]');
+
+    let Name = signupName.value.trim();
+    let Email = signupEmail.value.trim();
+    let Password = signupPassword.value;
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     if (!Name || !Email || !Password) {
-        alert("Fill the information");
+        Swal.fire({
+            title: 'Fill the information',
+            icon: 'warning',
+            showCancelButton: false,
+            customClass: {
+                popup: 'custom-alert',
+                confirmButton: 'custom-alert-confirm-btn'
+            }
+        });
         return false;
     }
 
-    var users = JSON.parse(localStorage.getItem('users') || '[]');
+    if (!emailRegex.test(Email)) {
+        Swal.fire({
+            title: 'Enter Correct Email!',
+            icon: 'warning',
+            showCancelButton: false,
+            customClass: {
+                popup: 'custom-alert',
+                confirmButton: 'custom-alert-confirm-btn'
+            }
+        });
+        return false;
+    }
 
     for (let i = 0; i < users.length; i++) {
 
         if (users[i].email === Email) {
-            alert("Email already exists");
-            return;
+            Swal.fire({
+                title: 'Email already exists!',
+                icon: 'warning',
+                showCancelButton: false,
+                customClass: {
+                    popup: 'custom-alert',
+                    confirmButton: 'custom-alert-confirm-btn'
+                }
+            });
+            return false;
         }
     }
+
+    if (Email === Password) {
+        Swal.fire({
+            title: 'Email and Password can not be same!',
+            icon: 'warning',
+            showCancelButton: false,
+            customClass: {
+                popup: 'custom-alert',
+                confirmButton: 'custom-alert-confirm-btn'
+            }
+        });
+        return false;
+    }
+
+    if (!strongPasswordRegex.test(Password)) {
+        Swal.fire({
+            title: 'Enter Strong Password!',
+            icon: 'warning',
+            showCancelButton: false,
+            customClass: {
+                popup: 'custom-alert',
+                confirmButton: 'custom-alert-confirm-btn'
+            }
+        });
+        return false;
+    }
+
 
     let newUser = {
         name: Name,
@@ -220,7 +314,15 @@ signupBtn.addEventListener("click", function () {
 
     localStorage.setItem("users", JSON.stringify(users));
 
-    alert("Account Created! Please Login");
+    Swal.fire({
+        title: 'Account Created! Please Login',
+        icon: 'success',
+        showCancelButton: false,
+        customClass: {
+            popup: 'custom-alert',
+            confirmButton: 'custom-alert-confirm-btn'
+        }
+    });
 
     loginEmail.value = Email;
     loginPassword.value = Password;
@@ -236,9 +338,24 @@ signupBtn.addEventListener("click", function () {
 
 
 function logOutFunction() {
-    currentUser = null;
-    localStorage.removeItem("currentUser");
-    showLoginPage();
+    Swal.fire({
+        title: 'Are you sure? You want to Log out?',
+        icon: 'warning',
+        showCancelButton: 'true',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'Cancel',
+        customClass: {
+            popup: 'custom-alert',
+            confirmButton: 'custom-alert-confirm-btn',
+            cancelButton: 'custom-alert-cancel-btn'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            currentUser = null;
+            localStorage.removeItem("currentUser");
+            showLoginPage();
+        }
+    });
 }
 
 
@@ -253,7 +370,15 @@ function post() {
     var imageUrl = createPostImgUrl.value.trim();
 
     if (!title) {
-        alert("Enter Post's Title");
+        Swal.fire({
+            title: "Enter Post's Title atleast!",
+            icon: 'warning',
+            showCancelButton: false,
+            customClass: {
+                popup: 'custom-alert',
+                confirmButton: 'custom-alert-confirm-btn'
+            }
+        });
         return;
     }
 
@@ -315,7 +440,15 @@ function updatePost() {
     var imageUrl = createPostImgUrl.value.trim();
 
     if (!title) {
-        alert("Enter Post's Title");
+        Swal.fire({
+            title: "Enter Post's Title atleast!",
+            icon: 'warning',
+            showCancelButton: false,
+            customClass: {
+                popup: 'custom-alert',
+                confirmButton: 'custom-alert-confirm-btn'
+            }
+        });
         return;
     }
 
@@ -348,16 +481,30 @@ function updatePost() {
 
 
 function deletePost(id) {
-    if (confirm("Are you sure? You want to delete this post?")) {
-        var allPosts = JSON.parse(localStorage.getItem("allPosts"));
 
-        var updatedPosts = allPosts.filter(function (p) {
-            return p.id !== id;
-        });
+    Swal.fire({
+        title: 'Are you sure? You want to delete this post?',
+        icon: 'warning',
+        showCancelButton: 'true',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'Cancel',
+        customClass: {
+            popup: 'custom-alert',
+            confirmButton: 'custom-alert-confirm-btn',
+            cancelButton: 'custom-alert-cancel-btn'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var allPosts = JSON.parse(localStorage.getItem("allPosts"));
 
-        localStorage.setItem("allPosts", JSON.stringify(updatedPosts));
-        loadAllPosts();
-    }
+            var updatedPosts = allPosts.filter(function (p) {
+                return p.id !== id;
+            });
+
+            localStorage.setItem("allPosts", JSON.stringify(updatedPosts));
+            loadAllPosts();
+        }
+    });
 }
 
 

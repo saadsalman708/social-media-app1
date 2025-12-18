@@ -15,16 +15,17 @@
     --body-color: #000;
     --body-bgcolor: rgb(222, 242, 205);
     --cards-bgcolor: #fff;
+    --alert-bgcolor: #fff;
 
     --postTime-color: rgba(0, 0, 0, 0.6);
     --blueBtn-color: rgb(58, 107, 255);
     --greenBtn-color: rgb(11, 184, 39);
     --redBtn-color: rgb(250, 0, 0);
-    
+
     --blueBtnHover-color: rgb(58, 107, 255);
     --greenBtnHover-color: rgb(11, 184, 39);
     --redBtnHover-color: rgb(255, 0, 0);
-    
+
     --likeBtns-color: rgb(232, 119, 119);
 }
 
@@ -32,7 +33,8 @@ body.darkTheme {
     --body-color: #fff;
     --body-bgcolor: #3e3f44;
     --cards-bgcolor: #1F1F1F;
-    
+    --alert-bgcolor: #3e3f44;
+
     --postTime-color: rgba(255, 255, 255, 0.6);
     --blueBtn-color: rgb(164, 175, 209);
     --greenBtn-color: rgb(123, 148, 128);
@@ -72,6 +74,41 @@ button {
 }
 
 
+
+
+
+
+
+
+
+
+/* swal fire custom styling */
+
+.custom-alert {
+    background-color: var(--alert-bgcolor);
+    color: var(--body-color);
+    border-radius: 1.4rem;
+}
+
+.custom-alert-confirm-btn {
+    background-color: rgb(11, 184, 39);
+}
+
+.custom-alert-confirm-btn:hover {
+    background-color: rgb(12, 123, 12);
+}
+
+.custom-alert-cancel-btn {
+    background-color: rgb(58, 107, 255);
+}
+
+.custom-alert-cancel-btn:hover {
+    background-color: rgb(8, 56, 200);
+}
+
+body.swal2-shown {
+    padding: 0 !important;
+}
 
 
 
@@ -218,6 +255,7 @@ input {
     0% {
         transform: translateX(100px);
     }
+
     100% {
         transform: translateX(1px);
     }
@@ -428,7 +466,7 @@ input {
 
 .likeBtns span {
     position: absolute;
-    transform: translate(5px , 3px);
+    transform: translate(5px, 3px);
     color: var(--likeBtns-color);
 }
 
